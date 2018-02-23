@@ -1,0 +1,17 @@
+<div class="row">
+    <h1 style="text-align: center">Reset Password</h1>
+    <div style="width: 30%; margin: 25px auto;">
+        <div>
+            <label>New Password:
+                <input [(ngModel)]="reset.newpassword" name="password" placeholder="NewPassword"/>
+            </label>
+        </div>
+        <div>
+            <label>Confirm Password:
+                <input [(ngModel)]="reset.conpassword" name="confirm" placeholder="ConfirmPassword"/>
+            </label>
+        </div>
+        <button (click)="resetpassword()">UpdatePassword</button>
+        <a routerLink="/idols">Go Back</a>
+    </div>
+</div>

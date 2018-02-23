@@ -1,0 +1,87 @@
+<div class="row">
+    <h1 style="text-align: center">Edit Your Idol</h1>
+    <div style="width: 30%; margin: 25px auto;">
+        <div>
+            <label>Firstname:
+                <input [(ngModel)]="idolform.firstname" name="idol.firstname" placeholder="Firstname"/>
+            </label>
+        </div>
+        <div>
+            <label>Lastname:
+                <input [(ngModel)]="idolform.lastname" name="idol.lastname" placeholder="Lastname"/>
+            </label>
+        </div>
+        <div>
+            <label>Nickname:
+                <input [(ngModel)]="idolform.nickname" name="idol.nickname" placeholder="Nickname"/>
+            </label>
+        </div>
+        <div>
+            <label>AKA:
+                <input [(ngModel)]="idolform.aka" name="idol.aka" placeholder="AKA"/>
+            </label>
+        </div>
+        <div>
+            <label>Birthday:
+                <input [(ngModel)]="idolform.birthday" name="idol.birthday" placeholder="Birthday"/>
+            </label>
+        </div>
+        <div>
+            <label>Height:
+                <input [(ngModel)]="idolform.height" name="idol.height" placeholder="Height"/>
+            </label>
+        </div>
+        <div>
+            <label>Blood group:
+                <input [(ngModel)]="idolform.bloodgroup" name="idol.bloodgroup" placeholder="Blood group"/>
+            </label>
+        </div>
+        <div>
+            <label>Address:
+                <input [(ngModel)]="idolform.address" name="idol.address" placeholder="Address"/>
+            </label>
+        </div>
+        <div>
+            <label>FavColor:
+                <input [(ngModel)]="idolform.favcolor" name="idol.favcolor" placeholder="FavColor"/>
+            </label>
+        </div>
+        <div>
+            <label>FavFood:
+                <input [(ngModel)]="idolform.favfood" name="idol.favfood" placeholder="FavFood"/>
+            </label>
+        </div>
+        <div>
+            <label>Hobby:
+                <input [(ngModel)]="idolform.hobby" name="idol.hobby" placeholder="Hobby"/>
+            </label>
+        </div>
+        <div>
+            <label>Language:
+                <input [(ngModel)]="idolform.lang" name="idol.lang" placeholder="Language"/>
+            </label>
+        </div>
+        <div>
+            <label>Education University:
+                <input [(ngModel)]="idolform.edu.university" name="idol.edu.university" placeholder="Edu University"/>
+            </label>
+        </div>
+        <div>
+            <label>Education Highschool:
+                <input [(ngModel)]="idolform.edu.highschool" name="idol.edu.highschool" placeholder="Edu Highschool"/>
+            </label>
+        </div>
+        <div>
+            <label>Description:
+                <textarea [(ngModel)]="idolform.description" name="idol.description" placeholder="Description"  rows="5" cols="70"></textarea>
+            </label>
+        </div>
+        <div>
+            <label>Image:
+                <input [(ngModel)]="idolform.image" name="idol.image" placeholder="src image"/>
+            </label>
+        </div>
+        <button (click)="updateIdol()">save</button>
+        <a routerLink="/idols">Go Back</a>
+    </div>
+</div>

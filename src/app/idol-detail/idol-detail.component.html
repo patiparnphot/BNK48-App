@@ -1,0 +1,92 @@
+<div class="col-md-9">
+    <div class="thumbnail">
+        <img class="img-responsive" src="{{ idol.image }}">
+        <div class="caption-full">
+            <h4>{{ idol.firstname }} {{ idol.lastname }}</h4>
+            <h4>{{ idol.nickname }} {{ idol.aka }}</h4>
+            <h4>Birthday: {{ idol.birthday }}</h4>
+            <h4>Height: {{ idol.height }}</h4>
+            <h4>Bloodgroup: {{ idol.bloodgroup }}</h4>
+            <h4>Address: {{ idol.address }}</h4>
+            <h4>FavColor: {{ idol.favcolor }}</h4>
+            <h4>FavFood: {{ idol.favfood }}</h4>
+            <h4>Hobby: {{ idol.hobby }}</h4>
+            <h4>Language: {{ idol.lang }}</h4>
+            <h4>Education in University: {{ idol.edu.university }}</h4>
+            <h4>Education in Highschool: {{ idol.edu.highschool }}</h4>
+            <p>
+                <em>Submitted By: <a routerLink="/users/{{ idol.author.id }}">{{ idol.author.username }}</a>, {{ idol.createAt }}</em>
+            </p>
+            <div *ngIf="(currentUser && (idol.author.id === currentUser._id)) || (currentUser && currentUser.isAdmin)">
+                <a class="btn btn-warning" routerLink="/idols/{{ idol._id }}/edit">Edit Idol</a>
+                <button class="btn btn-danger" (click)="deleteIdol()">DELETE</button>
+            </div>
+        </div>
+    </div>
+    <div class="well">
+        <div class="text-right">
+            <a class="btn btn-success pull-right" role="button" data-toggle="collapse" href="#collapseComment" aria-expanded="false" aria-controls="collapseComment">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new comment
+            </a>
+        </div>
+        <h4><strong>Comments <span class="glyphicon glyphicon glyphicon-comment" aria-hidden="true"></span></strong></h4>
+        <div class="collapse" id="collapseComment">
+            <div class="well" style="border-left: 5px solid #00C851;" *ngIf="!currentUser; else alreadySign">
+                <h5>You need to login before you can comment. <a routerLink="/signin">Click here</a> to go to the login page.</h5>
+            </div>
+            <ng-template #alreadySign>
+                <h4>Write your comment <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span></h4>
+                <div class="form-group">
+                    <input class="form-control" value="{{ currentUser.username }}" disabled/>
+                </div>
+                <div class="form-group">
+                    <input class="form-control" [(ngModel)]="addcomment[text]" name="comment[text]" placeholder="Write your comment..."/>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success btn-sm" (click)="addComment()">Comment <span class="glyphicon glyphicon-comment" aria-hidden="true"></span></button>
+                </div>
+            </ng-template>
+        </div>
+        <hr>
+        <div *ngIf="idol.comments.length === 0; else haveComment">
+            <em style="color: grey;">No comments yet.</em>
+        </div>
+        <ng-template #haveComment>
+            <div class="row" *ngFor="let comment of comments">
+                <div class="col-md-12">
+                    <strong>
+                        <div *ngIf="currentUser && (comment.author.id === currentUser._id); else checkcommentOwner">
+                            <span style="color: #40e0d0;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        </div>
+                        <ng-template #checkcommentOwner>
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                        </ng-template>
+                        {{ comment.author.username }}
+                    </strong>
+                    <span class="pull-right">{{ comment.createdAt }}</span>
+                    <p>{{ comment.text }}</p>
+                    <div *ngIf="(currentUser && (comment.author.id === currentUser._id)) || (currentUser && currentUser.isAdmin)">
+                        <a role="button" data-toggle="collapse" href="#collapseEdit{{ comment._id }}" aria-expanded="false" aria-controls="collapse<%= comment._id %>" class="btn btn-xs btn-info">EDIT</a>
+                        <button class="btn btn-xs btn-danger" (click)="deleteComment({{ comment._id }})">DELETE</button>
+                        <div class="collapse" id="collapseEdit{{ comment._id }}">
+                            <div class="well" style="border-left: 5px solid #ffbb33; margin-top: 15px;">
+                                <h4>Edit your comment <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></h4>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" value="{{ currentUser.username }}" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" type="text" [(ngModel)]="comment.text" name="editcomment[text]" placeholder="Your comment text...">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-warning btn-sm" (click)="updateComment({{ comment.text }}, {{ comment._id }})">
+                                        Edit comment <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>

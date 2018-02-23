@@ -1,0 +1,23 @@
+<header class="jumbotron">
+    <div class="container">
+        <h1><span class="glyphicon glyphicon-tent"></span> Welcome To BNK48 App</h1>
+        <p>a community which Ota share their beloved idol story</p>
+        <p>
+            <a class="btn btn-primary btn-lg" routerLink="/shareidol">Share your Idol on our App</a>
+        </p>
+    </div>
+</header>
+  
+<div class="row text-center" *ngFor="let idol of idols">
+    <div class="col-md-3 col-sm-6">
+        <div class="thumbnail">
+            <img src="{{ idol.image }}">
+            <div class="caption">
+                <h4>{{ idol.nickname }}</h4>
+            </div>
+            <p>
+                <a class="btn btn-primary btn-lg" routerLink="/idols/{{ idol._id }}">More INFO</a>
+            </p>
+        </div>
+    </div>
+</div>

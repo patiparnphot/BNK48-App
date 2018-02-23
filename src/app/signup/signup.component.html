@@ -1,0 +1,42 @@
+<div class="row">
+    <h1 style="text-align: center">Share Your Idol</h1>
+    <div style="width: 30%; margin: 25px auto;">
+        <div>
+            <label>Firstname:
+                <input [(ngModel)]="user.firstname" name="firstname" placeholder="Firstname"/>
+            </label>
+        </div>
+        <div>
+            <label>Lastname:
+                <input [(ngModel)]="user.lastname" name="lastname" placeholder="Lastname"/>
+            </label>
+        </div>
+        <div>
+            <label>Username:
+                <input [(ngModel)]="user.username" name="username" placeholder="Username"/>
+            </label>
+        </div>
+        <div>
+            <label>Password:
+                <input [(ngModel)]="user.password" name="password" placeholder="Password"/>
+            </label>
+        </div>
+        <div>
+            <label>Email:
+                <input type="email" [(ngModel)]="user.email" name="email" placeholder="example@gmail.com"/>
+            </label>
+        </div>
+        <div>
+            <label>Avatar:
+                <input type="file" #avatar (change)="fileSelected($event.target.file[0])" name="avatar" />
+            </label>
+        </div>
+        <div>
+            <label>AdminCode:
+                <input [(ngModel)]="user.admincode" name="admincode" placeholder="AdminCode"/>
+            </label>
+        </div>
+        <button (click)="register()">Register</button>
+        <a routerLink="/idols">Go Back</a>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="row">
+    <h1 style="text-align: center">Share Your Idol</h1>
+    <div style="width: 30%; margin: 25px auto;">
+        <div>
+            <label>Username:
+                <input [(ngModel)]="user.username" name="username" placeholder="Username"/>
+            </label>
+        </div>
+        <div>
+            <label>Password:
+                <input [(ngModel)]="user.password" name="password" placeholder="Password"/>
+            </label>
+        </div>
+        <button (click)="signin()">SignIn</button>
+        <a routerLink="/idols">Go Back</a>
+    </div>
+</div>
