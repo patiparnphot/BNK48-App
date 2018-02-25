@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  @ViewChild("fileInput") fileInput: ElementRef;
   user = {
     firstname: "",
     lastname: "",
@@ -18,13 +19,12 @@ export class SignupComponent implements OnInit {
     avatar: null,
     admincode: "",
   };
-  file = null;
+  file: File = null;
   loading: boolean = false;
 
   constructor(
     private idolService: IdolService,
-    private router: Router,
-    private elem: ElementRef
+    private router: Router
   ) { };
 
   ngOnInit() {
@@ -41,12 +41,17 @@ export class SignupComponent implements OnInit {
   //   }
   // };
   
+  preUpload(event) {
+    if(event.target.files.length > 0){
+      let file = event.target.files[0];
+      this.file = file;
+    }
+  };
+  
   upload() {
-    let files = this.elem.nativeElement.querySelector("#file").files;
-    if(files){
-      let file = files[0];
+    if(this.file){
       let formData = new FormData();
-      formData.append('file', file, file.name);
+      formData.append('file', this.file, this.file.name);
       this.loading = true;
       this.idolService.upload(formData).subscribe(resp => {
         this.user.avatar = resp;
