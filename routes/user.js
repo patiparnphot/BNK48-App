@@ -38,29 +38,40 @@ cloudinary.config({
   api_secret: "c1hU9DtqLmmPHsvn0k6kqZBrZKc"
 });
 
+var preAuthenticate = function (req,res,next){
+    console.log(JSON.stringify(req.body));
+    console.log(JSON.stringify(req.body.avatar));
+    return next();
+};
+
+router.post("/upload", preAuthenticate,  upload.single("image"), function(req, res, next){
+    cloudinary.uploader.upload(req.body.avatar, function(error, result) {
+        if(error) return next(error);
+        res.json(result.secure_url);
+    });
+});
 
 //REGISTER - add new user to db
-router.post("/register", upload.single("avatar"), function(req, res, next){
-    cloudinary.uploader.upload(req.file.path, function(result) {
-        var avatar = result.secure_url;
-        var newUser = new User({
-            username: req.body.username,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            email: req.body.email,
-            avatar: avatar
-        });
-        if(req.body.adminCode === "amnotgonnatellu"){
-            newUser.isAdmin = true;
-        };
-        User.register(newUser, req.body.password, function(err,user){
-            if(err) return next(err);
-            passport.authenticate("local")(req, res, function(){
-                console.log(req.user);
-                res.json(req.user);
-            });
-        });
-    });
+router.post("/register", preAuthenticate, function(req, res, next){
+        // var avatar = result.secure_url;
+        // var newUser = new User({
+        //     username: req.body.username,
+        //     firstname: req.body.firstname,
+        //     lastname: req.body.lastname,
+        //     email: req.body.email,
+        //     avatar: avatar
+        // });
+        // if(req.body.adminCode === "amnotgonnatellu"){
+        //     newUser.isAdmin = true;
+        // };
+        // User.register(newUser, req.body.password, function(err,user){
+        //     if(err) return next(err);
+        //     passport.authenticate("local")(req, res, function(){
+        //         console.log(req.user);
+        //         res.json(req.user);
+        //     });
+        // });
+    next();
 });
 
 //SIGNIN - matching data and user db

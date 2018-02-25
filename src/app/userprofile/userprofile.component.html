@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-4">
-        <h1>{{ userprofile.user.firstname }} {{ userprofile.user.lastname }}</h3>
+        <h1>{{ userprofile.user.firstname }} {{ userprofile.user.lastname }}</h1>
         <div class="thumbnail text-center">
             <img src="{{ userprofile.user.avatar }}" alt="user profile image">
             <div class="caption">{{ userprofile.user.email }}</div>
@@ -21,7 +21,7 @@
         <hr>
     </div>  
     <div class="col-md-8">
-        <h2><{{ userprofile.user.username }}'s idols:</h2>
+        <h2>{{ userprofile.user.username }}'s idols:</h2>
         <div class="thumbnail text-center" *ngFor="let idol of userprofile.idols">
             <img src="{{ idol.image }}">
             <div class="caption">

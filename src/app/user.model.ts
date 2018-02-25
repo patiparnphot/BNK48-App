@@ -1,4 +1,4 @@
-import {Deserializable} from "./deserializable.model";
+import { Deserializable } from "./deserializable.model";
 import { Idols } from './idol.model';
 
 export class User  implements Deserializable<User> {
@@ -25,8 +25,8 @@ export class Userform {
   firstname: String;
   lastname: String;
   email: String;
-  avatar: any;
-  isAdmin: String;
+  avatar: String;
+  admincode: String;
 }
 
 export class Userlogin {

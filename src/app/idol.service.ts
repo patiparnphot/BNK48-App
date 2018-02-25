@@ -11,6 +11,10 @@ const httpOptions = {
  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
+const httpOptionfile = {
+ headers: new HttpHeaders({ 'enctype': 'multipart/form-data', 'Accept': 'application/json' })
+};
+
 @Injectable()
 export class IdolService {
 
@@ -148,6 +152,13 @@ export class IdolService {
          tap(_ => console.log(`fetched user id=${authorid}`)),
          catchError(this.handleError<any>('getUserProfile'))
     );
+ };
+ 
+ upload (file: any): Observable<String> {
+     return this.http.post<String>(`api/upload`, file).pipe(
+         tap((src: String) => console.log(`${src}`)),
+         catchError(this.handleError<String>('upload'))
+     );
  };
  
  constructor(

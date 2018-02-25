@@ -5,6 +5,7 @@ var idolSchema = new mongoose.Schema({
    lastname: String,
    nickname: String,
    aka: String,
+   birthday: String,
    height: Number,
    bloodgroup: String,
    address: String,

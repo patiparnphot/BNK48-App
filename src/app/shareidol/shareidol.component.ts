@@ -17,9 +17,9 @@ export class ShareidolComponent implements OnInit {
   ) { };
 
   ngOnInit() {
-  }
+  };
   
-  shareIdol (): void {
+  shareIdol(): void {
     this.idolService.shareIdol(this.idol).subscribe(() => this.goBack());
   };
   

@@ -9,6 +9,7 @@ export class Idol  implements Deserializable<Idol> {
   lastname: String;
   nickname: String;
   aka: String;
+  birthday: String;
   height: Number;
   bloodgroup: String;
   address: String;
@@ -38,6 +39,7 @@ export class Idols  implements Deserializable<Idols> {
   lastname: String;
   nickname: String;
   aka: String;
+  birthday: String;
   height: Number;
   bloodgroup: String;
   address: String;
@@ -65,6 +67,7 @@ export class Idolform  implements Deserializable<Idolform> {
   lastname: String;
   nickname: String;
   aka: String;
+  birthday: String;
   height: Number;
   bloodgroup: String;
   address: String;

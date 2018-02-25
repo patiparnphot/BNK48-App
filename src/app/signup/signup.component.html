@@ -1,42 +1,80 @@
 <div class="row">
-    <h1 style="text-align: center">Share Your Idol</h1>
+    <h1 style="text-align: center">Join US</h1>
     <div style="width: 30%; margin: 25px auto;">
-        <div>
-            <label>Firstname:
-                <input [(ngModel)]="user.firstname" name="firstname" placeholder="Firstname"/>
-            </label>
-        </div>
-        <div>
-            <label>Lastname:
-                <input [(ngModel)]="user.lastname" name="lastname" placeholder="Lastname"/>
-            </label>
-        </div>
-        <div>
-            <label>Username:
-                <input [(ngModel)]="user.username" name="username" placeholder="Username"/>
-            </label>
-        </div>
-        <div>
-            <label>Password:
-                <input [(ngModel)]="user.password" name="password" placeholder="Password"/>
-            </label>
-        </div>
-        <div>
-            <label>Email:
-                <input type="email" [(ngModel)]="user.email" name="email" placeholder="example@gmail.com"/>
-            </label>
-        </div>
-        <div>
-            <label>Avatar:
-                <input type="file" #avatar (change)="fileSelected($event.target.file[0])" name="avatar" />
-            </label>
-        </div>
-        <div>
-            <label>AdminCode:
-                <input [(ngModel)]="user.admincode" name="admincode" placeholder="AdminCode"/>
-            </label>
-        </div>
-        <button (click)="register()">Register</button>
-        <a routerLink="/idols">Go Back</a>
+        <form (ngSubmit)="upload()" #uploadForm="ngForm" [ngFormOptions]="{ updateOn: 'blur' }" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="file">Upload</label>
+                <input type="file" name="file" id="file" [(ngModel)]="file" [ngModelOptions]="{ updateOn: 'change' }" accept="image/*">
+                <button type="button" class="btn btn-sm btn-default" (click)="clearFile()">clear file</button>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success" >
+                    Upload Avatar <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
+                </button>
+            </div>
+        </form>
+        <form (ngSubmit)="register()" #userForm="ngForm" [ngFormOptions]="{ updateOn: 'blur' }" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="firstname">Firstname</label>
+                <input type="text" class="form-control" id="firstname" [(ngModel)]="user.firstname" [ngModelOptions]="{ updateOn: 'change' }"
+                name="firstname" placeholder="Firstname" #firstname="ngModel" required>
+                <div [hidden]="firstname.valid || firstname.pristine" class="alert alert-danger">
+                    Firstname is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="lastname">Lastname</label>
+                <input type="text" class="form-control" id="lastname" [(ngModel)]="user.lastname" [ngModelOptions]="{ updateOn: 'change' }"
+                name="lastname" placeholder="Lastname" #lastname="ngModel" required>
+                <div [hidden]="lastname.valid || lastname.pristine" class="alert alert-danger">
+                    Lastname is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" [(ngModel)]="user.username" [ngModelOptions]="{ updateOn: 'change' }" 
+                name="username" placeholder="Username" #username="ngModel" required>
+                <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
+                    Username is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" [(ngModel)]="user.password" [ngModelOptions]="{ updateOn: 'change' }" 
+                name="password" placeholder="Password" #password="ngModel" required>
+                <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                    Password is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" [(ngModel)]="user.email" [ngModelOptions]="{ updateOn: 'change' }" 
+                name="email" placeholder="example@gmail.com" #email="ngModel" required>
+                <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                    Email is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="avatar">Avatar</label>
+                <input type="text" class="form-control" id="avatar" [(ngModel)]="user.avatar" [ngModelOptions]="{ updateOn: 'change' }" 
+                name="avatar" placeholder="Your profile src" #avatar="ngModel" required>
+                <div [hidden]="avatar.valid || avatar.pristine" class="alert alert-danger">
+                    Avatar is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="admincode">Admin code</label>
+                <input type="text" class="form-control" id="admincode" [(ngModel)]="user.admincode" [ngModelOptions]="{ updateOn: 'change' }" 
+                name="admincode" placeholder="AdminCode">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success" [disabled]="(!userForm.form.valid) || loading || (!user.avatar)">
+                    Submit <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
+                </button>
+                <button type="button" class="btn btn-success" (click)="goBack()" >
+                    GO BACK
+                </button>
+            </div>
+        </form>
     </div>
 </div>
