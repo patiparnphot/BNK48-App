@@ -19,7 +19,7 @@ export class SignupComponent implements OnInit {
     avatar: null,
     admincode: "",
   };
-  file: File = null;
+  file: String = null;
   loading: boolean = false;
 
   constructor(
@@ -43,17 +43,19 @@ export class SignupComponent implements OnInit {
   
   preUpload(event) {
     if(event.target.files.length > 0){
+      let reader = new FileReader();
       let file = event.target.files[0];
-      this.file = file;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.file = reader.result;
+      };
     }
   };
   
   upload() {
     if(this.file){
-      let formData = new FormData();
-      formData.append('file', this.file, this.file.name);
       this.loading = true;
-      this.idolService.upload(formData).subscribe(resp => {
+      this.idolService.upload(this.file).subscribe(resp => {
         this.user.avatar = resp;
         this.loading = false;
       });

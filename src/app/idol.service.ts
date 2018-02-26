@@ -154,8 +154,8 @@ export class IdolService {
     );
  };
  
- upload (file: any): Observable<String> {
-     return this.http.post<String>(`api/upload`, file).pipe(
+ upload (file: String): Observable<String> {
+     return this.http.post<String>(`api/upload`, file, httpOptions).pipe(
          tap((src: String) => console.log(`${src}`)),
          catchError(this.handleError<String>('upload'))
      );

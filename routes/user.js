@@ -45,6 +45,7 @@ var preAuthenticate = function (req,res,next){
 };
 
 router.post("/upload", preAuthenticate,  upload.single("image"), function(req, res, next){
+    console.log("you have entered api but not cloundinary yet");
     cloudinary.uploader.upload(req.body.avatar, function(error, result) {
         if(error) return next(error);
         res.json(result.secure_url);
