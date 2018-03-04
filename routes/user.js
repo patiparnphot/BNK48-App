@@ -6,8 +6,10 @@ var express     = require("express"),
     crypto      = require("crypto"),
     multer      = require("multer"),
     request     = require('request'),
+    mongoose    = require('mongoose'),
     Idol    = require("../models/idol"),
     User    = require("../models/user");
+    
 
 var smtpTransport = nodeMailer.createTransport({
                service: "Gmail",
@@ -40,54 +42,54 @@ cloudinary.config({
 
 var preAuthenticate = function (req,res,next){
     console.log(JSON.stringify(req.body));
-    console.log(JSON.stringify(req.body.avatar));
     return next();
 };
 
-router.post("/upload", preAuthenticate,  upload.single("image"), function(req, res, next){
+router.post("/upload", function(req, res, next){
     console.log("you have entered api but not cloundinary yet");
-    cloudinary.uploader.upload(req.body.avatar, function(error, result) {
-        if(error) return next(error);
-        res.json(result.secure_url);
+    var upload = "data:" + req.body.filetype + ";base64," + req.body.value;
+    cloudinary.uploader.upload(upload, function(result) {
+        console.log(result);
+        res.json(result);
     });
 });
 
 //REGISTER - add new user to db
 router.post("/register", preAuthenticate, function(req, res, next){
-        // var avatar = result.secure_url;
-        // var newUser = new User({
-        //     username: req.body.username,
-        //     firstname: req.body.firstname,
-        //     lastname: req.body.lastname,
-        //     email: req.body.email,
-        //     avatar: avatar
-        // });
-        // if(req.body.adminCode === "amnotgonnatellu"){
-        //     newUser.isAdmin = true;
-        // };
-        // User.register(newUser, req.body.password, function(err,user){
-        //     if(err) return next(err);
-        //     passport.authenticate("local")(req, res, function(){
-        //         console.log(req.user);
-        //         res.json(req.user);
-        //     });
-        // });
-    next();
+    var newUser = new User({
+        username: req.body.username,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        avatar: req.body.avatar
+    });
+    if(req.body.admincode === "amnotgonnatellu"){
+        newUser.isAdmin = true;
+    };
+    User.register(newUser, req.body.password, function(err,user){
+        if(err) return next(err);
+        passport.authenticate("local")(req, res, function(){
+            console.log(req.user);
+            res.json(req.user);
+        });
+    });
 });
 
 //SIGNIN - matching data and user db
-router.post("/login", passport.authenticate("local"), function(req, res){
+router.post("/login", preAuthenticate, passport.authenticate("local"), function(req, res){
     console.log(req.user);
     res.json(req.user);
 });
 
 //LOGOUT - delete user out of session
 router.get("/logout", function(req, res){
-   req.logout();
+    console.log(req.user);
+    req.logout();
+    console.log("I log you out!!!");
 });
 
 //FORGOT - create token and send token to client email
-router.post("/forgot", function(req, res, next){
+router.post("/forgot", preAuthenticate, function(req, res, next){
     async.waterfall([
         function(done){
             crypto.randomBytes(20, function(err, buff){
@@ -109,7 +111,7 @@ router.post("/forgot", function(req, res, next){
             var mailOptions = {
                 to: user.email,
                 from: "patiparnair@gmail.com",
-                subject: "YelpCamp Password Reset",
+                subject: "BNK48APP Password Reset",
                 text: "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
                     "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
                     "http://" + req.headers.host + "/reset/" + token + "\n\n" +
@@ -127,7 +129,7 @@ router.post("/forgot", function(req, res, next){
 });
 
 //RESET - change password and send confirm message to client email
-router.post("/reset/:token", function(req, res, next){
+router.post("/reset/:token", preAuthenticate, function(req, res, next){
     async.waterfall([
         function(done){
             User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user){
@@ -165,11 +167,13 @@ router.post("/reset/:token", function(req, res, next){
     });
 });
 
+
 //USER - get a user profile
-router.get("/users/:authorId", function(req, res, next) {
+router.post("/users/:authorId", function(req, res, next) {
+    console.log(JSON.stringify(req.params));
     User.findById(req.params.authorId, function(err, authorUser){
         if (err) return next(err);
-        Idol.find().where("author.id").equals(authorUser._id).exec(function(err, yourIdol){
+        Idol.find().where("author.username").equals(authorUser.username).exec(function(err, yourIdol){
             if (err) return next(err);
             var userProfile = {
                 user: authorUser,

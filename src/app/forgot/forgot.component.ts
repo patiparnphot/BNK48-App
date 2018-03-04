@@ -8,7 +8,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./forgot.component.css']
 })
 export class ForgotComponent implements OnInit {
-  email: String;
+  forgot = {
+    email: ""
+  };
 
   constructor(
     private idolService: IdolService,
@@ -19,7 +21,7 @@ export class ForgotComponent implements OnInit {
   }
 
   forgotpassword(): void {
-    this.idolService.forgot(this.email).subscribe(() => this.goBack())
+    this.idolService.forgot(this.forgot).subscribe(() => this.goBack())
   };
 
   goBack() {

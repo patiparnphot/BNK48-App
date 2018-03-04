@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Idol, Idolform } from '../idol.model';
+import { Cloudinary } from '../user.model';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { IdolService } from '../idol.service';
@@ -11,7 +12,18 @@ import { IdolService } from '../idol.service';
 })
 export class EditidolComponent implements OnInit {
   idol: Idol;
-  idolform: Idolform;
+  file = null;
+  loading: boolean = false;
+  uploadData = {
+    filename: "",
+    filetype: "",
+    value: ""
+  };
+  newsrc = null;
+  id = "";
+  editidol = {
+    idol: null
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -20,37 +32,43 @@ export class EditidolComponent implements OnInit {
   ) {};
 
   ngOnInit() {
+    this.id = this.route.snapshot.params.id;
     this.getIdol();
-    this.getIdolform();
+  };
+    
+  preUpload(event) {
+    if(event.target.files.length > 0){
+      let reader = new FileReader();
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.uploadData.filename = file.name;
+        this.uploadData.filetype = file.type;
+        this.uploadData.value = reader.result.split(',')[1];
+        this.file = reader.result;
+      };
+    }
+  };
+
+  upload() {
+    if(this.file){
+      this.loading = true;
+      this.idolService.upload(this.uploadData).subscribe((result: Cloudinary) => {
+        this.newsrc = result.secure_url;
+        this.loading = false;
+      });
+    }
   };
 
   getIdol(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.idolService.getIdol(id)
+    this.idolService.getIdol(this.id)
     .subscribe(idol => this.idol = idol);
   };
   
-  getIdolform(): void {
-    this.idolform.firstname = this.idol.firstname;
-    this.idolform.lastname = this.idol.lastname;
-    this.idolform.nickname = this.idol.nickname;
-    this.idolform.aka = this.idol.aka;
-    this.idolform.height = this.idol.height;
-    this.idolform.bloodgroup = this.idol.bloodgroup;
-    this.idolform.address = this.idol.address;
-    this.idolform.favcolor = this.idol.favcolor;
-    this.idolform.favfood = this.idol.favfood;
-    this.idolform.hobby = this.idol.hobby;
-    this.idolform.lang = this.idol.lang;
-    this.idolform.edu.university = this.idol.edu.university;
-    this.idolform.edu.highschool = this.idol.edu.highschool;
-    this.idolform.image = this.idol.image;
-    this.idolform.description = this.idol.description;
-  };
-  
   updateIdol(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.idolService.updateIdol(id, this.idolform).subscribe(() => this.goBack());
+    this.editidol.idol = this.idol;
+    this.idolService.updateIdol(this.id, this.editidol);
+    this.goBack();
   };
   
   goBack(): void {

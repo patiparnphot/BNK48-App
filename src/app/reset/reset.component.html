@@ -1,17 +1,38 @@
+<app-header></app-header>
+ 
+<div class="container">
+
 <div class="row">
     <h1 style="text-align: center">Reset Password</h1>
     <div style="width: 30%; margin: 25px auto;">
-        <div>
-            <label>New Password:
-                <input [(ngModel)]="reset.newpassword" name="password" placeholder="NewPassword"/>
-            </label>
-        </div>
-        <div>
-            <label>Confirm Password:
-                <input [(ngModel)]="reset.conpassword" name="confirm" placeholder="ConfirmPassword"/>
-            </label>
-        </div>
-        <button (click)="resetpassword()">UpdatePassword</button>
-        <a routerLink="/idols">Go Back</a>
+        <form (ngSubmit)="resetpassword()" #resetForm="ngForm" [ngFormOptions]="{ updateOn: 'blur' }">
+            <div class="form-group">
+                <label for="newpass">New Password</label>
+                <input type="password" class="form-control" id="newpass" [(ngModel)]="reset.password" [ngModelOptions]="{ updateOn: 'change' }" 
+                name="newpass" placeholder="NewPassword" #password="ngModel" required>
+                <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+                    New Password is required
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="conpass">Confirm Password</label>
+                <input type="password" class="form-control" id="conpass" [(ngModel)]="reset.confirm" [ngModelOptions]="{ updateOn: 'change' }" 
+                name="conpass" placeholder="ConfirmPassword" #confirm="ngModel" required>
+                <div [hidden]="confirm.valid || confirm.pristine" class="alert alert-danger">
+                    Confirm Password is required
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success" [disabled]="(!resetForm.form.valid)">
+                    Submit
+                </button>
+                <button type="button" class="btn btn-success" (click)="goBack()" >
+                    GO BACK
+                </button>
+            </div>
+        </form>
     </div>
+</div>
+
+
 </div>

@@ -2,6 +2,11 @@ var express = require("express"),
     router  = express.Router(),
     Idol = require("../models/idol");
 
+var preAuthenticate = function (req,res,next){
+    console.log(JSON.stringify(req.body));
+    return next();
+};
+
 //IDOLS - get all idols
 router.get("/", function(req, res, next){
     Idol.find({}, function(err, allIdols){
@@ -14,12 +19,13 @@ router.get("/", function(req, res, next){
 router.get("/:id", function(req, res, next) {
   Idol.findById(req.params.id).populate("comments").exec(function(err, currentlyIdol){
     if (err) return next(err);
+    console.log(currentlyIdol);
     res.json(currentlyIdol);
   });
 });
 
 //CREATE - add a new idol to db
-router.post("/", function(req, res, next) {
+router.post("/", preAuthenticate, function(req, res, next) {
   Idol.create(req.body.idol, function (err, newlyIdol) {
     if (err) return next(err);
     newlyIdol.author.id = req.user._id;
@@ -34,6 +40,7 @@ router.post("/", function(req, res, next) {
 router.put("/:id", function(req, res, next) {
   Idol.findByIdAndUpdate(req.params.id, req.body.idol, function (err, idol) {
     if (err) return next(err);
+    console.log(idol);
   });
 });
 

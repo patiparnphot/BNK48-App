@@ -2,9 +2,9 @@ import { Deserializable } from "./deserializable.model";
 import { Idols } from './idol.model';
 
 export class User  implements Deserializable<User> {
-  _id: number;
-  username: String;
-  password: String;
+  _id: any;
+  username: string;
+  password: string;
   firstname: String;
   lastname: String;
   email: String;
@@ -19,9 +19,16 @@ export class User  implements Deserializable<User> {
   }
 }
 
+export class Currently {
+  _id: any;
+  username: string;
+  password: string;
+  isAdmin: boolean;
+}
+
 export class Userform {
-  username: String;
-  password: String;
+  username: string;
+  password: string;
   firstname: String;
   lastname: String;
   email: String;
@@ -30,13 +37,13 @@ export class Userform {
 }
 
 export class Userlogin {
-  username: String;
-  password: String;
+  username: string;
+  password: string;
 }
 
 export class Userreset {
-  newpassword: String;
-  conpassword: String;
+  password: String;
+  confirm: String;
 }
 
 export class Userprofile  implements Deserializable<Userprofile> {
@@ -49,4 +56,22 @@ export class Userprofile  implements Deserializable<Userprofile> {
     this.idols = input.idols.map(idol => new Idols().deserialize(idol));
     return this;
   }
+}
+
+export class Cloudinary {
+  public_id: String;
+  version: Number;
+  signature: String;
+  width: Number;
+  height: Number;
+  format: String;
+  resource_type: String;
+  created_at: String;
+  tags: any;
+  bytes: Number;
+  type: String;
+  etag: String;
+  placeholder: Boolean;
+  url: String;
+  secure_url: String;
 }

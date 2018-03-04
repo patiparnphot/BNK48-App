@@ -1,9 +1,13 @@
-<div class="col-md-9">
+<app-header></app-header>
+ 
+<div class="container">
+
+<div class="col-md-12">
     <div class="thumbnail">
         <img class="img-responsive" src="{{ idol.image }}">
         <div class="caption-full">
-            <h4>{{ idol.firstname }} {{ idol.lastname }}</h4>
-            <h4>{{ idol.nickname }} {{ idol.aka }}</h4>
+            <h4>Firstname: {{ idol.firstname }}   Lastname: {{ idol.lastname }}</h4>
+            <h4>Nickname: {{ idol.nickname }}   AKA: {{ idol.aka }}</h4>
             <h4>Birthday: {{ idol.birthday }}</h4>
             <h4>Height: {{ idol.height }}</h4>
             <h4>Bloodgroup: {{ idol.bloodgroup }}</h4>
@@ -14,6 +18,7 @@
             <h4>Language: {{ idol.lang }}</h4>
             <h4>Education in University: {{ idol.edu.university }}</h4>
             <h4>Education in Highschool: {{ idol.edu.highschool }}</h4>
+            <h4>Description: {{ idol.description }}</h4>
             <p>
                 <em>Submitted By: <a routerLink="/users/{{ idol.author.id }}">{{ idol.author.username }}</a>, {{ idol.createdAt }}</em>
             </p>
@@ -36,16 +41,21 @@
             </div>
             <ng-template #alreadySign>
                 <div class="well" style="border-left: 5px solid #00C851;">
-                    <h4>Write your comment <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span></h4>
-                    <div class="form-group">
-                        <input class="form-control" value="{{ currentUser.username }}" disabled/>
-                    </div>
-                    <div class="form-group">
-                        <input class="form-control" [(ngModel)]="addcomment[text]" name="comment[text]" placeholder="Write your comment..."/>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-success btn-sm" (click)="addComment()">Comment <span class="glyphicon glyphicon-comment" aria-hidden="true"></span></button>
-                    </div>  
+                    <form (ngSubmit)="addComment()" #addcommentForm="ngForm" [ngFormOptions]="{ updateOn: 'blur' }">
+                        <div class="form-group">
+                            <input class="form-control" value="{{ currentUser.username }}" disabled/>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" [(ngModel)]="addcomment.text" [ngModelOptions]="{ updateOn: 'change' }"
+                            name="addcomment" placeholder="Write your comment..." #addcommentmodel="ngModel" required>
+                            <div [hidden]="addcommentmodel.valid || addcommentmodel.pristine" class="alert alert-danger">
+                                Comment is required
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-success btn-sm">Comment <span class="glyphicon glyphicon-comment" aria-hidden="true"></span></button>
+                        </div>
+                    </form>
                 </div>
             </ng-template>
         </div>
@@ -54,10 +64,10 @@
             <em style="color: grey;">No comments yet.</em>
         </div>
         <ng-template #haveComment>
-            <div class="row" *ngFor="let comment of idol.comments;let index = index;">
+            <div class="row" *ngFor="let comment of idol.comments;">
                 <div class="col-md-12">
                     <strong>
-                        <div *ngIf="currentUser && (index.author.id === currentUser._id); else checkcommentOwner">
+                        <div *ngIf="currentUser && (comment.author.id === currentUser._id); else checkcommentOwner">
                             <span style="color: #40e0d0;" class="glyphicon glyphicon-user" aria-hidden="true"></span>
                         </div>
                         <ng-template #checkcommentOwner>
@@ -65,25 +75,31 @@
                         </ng-template>
                         {{ comment.author.username }}
                     </strong>
-                    <span class="pull-right">{{ index.createdAt }}</span>
-                    <p>{{ index.text }}</p>
-                    <div *ngIf="(currentUser && (index.author.id === currentUser._id)) || (currentUser && currentUser.isAdmin)">
-                        <a role="button" data-toggle="collapse" href="#collapseEdit{{ index._id }}" aria-expanded="false" aria-controls="collapse<%= comment._id %>" class="btn btn-xs btn-info">EDIT</a>
-                        <button class="btn btn-xs btn-danger" (click)="deleteComment(index._id)">DELETE</button>
-                        <div class="collapse" id="collapseEdit{{ index._id }}">
+                    <span class="pull-right">{{ comment.createdAt }}</span>
+                    <p>{{ comment.text }}</p>
+                    <div *ngIf="(currentUser && (comment.author.id === currentUser._id)) || (currentUser && currentUser.isAdmin)">
+                        <a role="button" data-toggle="collapse" href="#collapseEdit{{ comment._id }}" aria-expanded="false" class="btn btn-xs btn-info">EDIT</a>
+                        <button class="btn btn-xs btn-danger" (click)="deleteComment(comment._id)">DELETE</button>
+                        <div class="collapse" id="collapseEdit{{ comment._id }}">
                             <div class="well" style="border-left: 5px solid #ffbb33; margin-top: 15px;">
-                                <h4>Edit your comment <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></h4>
-                                <div class="form-group">
-                                    <input class="form-control" type="text" value="currentUser.username" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" type="text" [(ngModel)]="idol.comment[index].text" name="editcomment[text]" placeholder="Your comment text...">
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-warning btn-sm" (click)="updateComment(index.text, index._id)">
-                                        Edit comment <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                                    </button>
-                                </div>
+                                <form (ngSubmit)="updateComment(comment.text, comment._id)" #editcommentForm="ngForm" [ngFormOptions]="{ updateOn: 'blur' }">
+                                    <h4>Edit your comment <span class="glyphicon glyphicon-edit" aria-hidden="true"></span></h4>
+                                    <div class="form-group">
+                                        <input class="form-control" value="{{ currentUser.username }}" disabled/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" [(ngModel)]="comment.text" [ngModelOptions]="{ updateOn: 'change' }"
+                                        name="editcomment {{ comment.text }}" placeholder="Write your comment..." #editcommentmodel="ngModel" required>
+                                        <div [hidden]="editcommentmodel.valid || editcommentmodel.pristine" class="alert alert-danger">
+                                            Comment is required
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            Edit comment <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -91,4 +107,7 @@
             </div>
         </ng-template>
     </div>
+</div>
+
+
 </div>

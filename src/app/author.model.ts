@@ -1,7 +1,7 @@
 import {Deserializable} from "./deserializable.model";
 
 export class Author implements Deserializable<Author> {
-  id: number;
+  id: any;
   username: string;
   
   deserialize(input: any): Author {

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Userlogin } from '../user.model';
+import { User, Userlogin } from '../user.model';
 import { IdolService } from '../idol.service';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
-  user: Userlogin;
+  user = {
+    username: "",
+    password: ""
+  };
   
 
   constructor(
@@ -21,8 +24,13 @@ export class SigninComponent implements OnInit {
   };
 
   signin(): void {
-    this.idolService.signIn(this.user).subscribe(resp => {
-      localStorage.setItem('usersess', JSON.stringify(resp));
+    this.idolService.signIn(this.user).subscribe((currentUser: User) => {
+      let isAdmin = currentUser.isAdmin.toString();
+      let _id = currentUser._id.toString();
+      localStorage.setItem('username', currentUser.username);
+      localStorage.setItem('password', this.user.password);
+      localStorage.setItem('isAdmin', isAdmin);
+      localStorage.setItem('_id', _id);
       this.goBack();
     });
   };

@@ -1,3 +1,7 @@
+<app-header></app-header>
+ 
+<div class="container">
+
 <div class="row">
     <h1 style="text-align: center">Join US</h1>
     <div style="width: 30%; margin: 25px auto;">
@@ -6,11 +10,13 @@
             <input type="file" name="file" id="file"accept="image/*" (change)="preUpload($event)" #fileInput>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-success" (click)="upload()">
-                Upload Avatar <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
+            <button type="button" class="btn btn-success" (click)="upload()" [disabled]="loading || (!file)">
+                Upload Avatar <p *ngIf="loading">loading...</p>
             </button>
         </div>
         <img *ngIf="file" src="{{ file }}" style="width: 100%">
+        <br>
+        <br>
         <form (ngSubmit)="register()" #userForm="ngForm" [ngFormOptions]="{ updateOn: 'blur' }" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="firstname">Firstname</label>
@@ -75,4 +81,6 @@
             </div>
         </form>
     </div>
+</div>
+
 </div>

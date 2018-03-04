@@ -17,21 +17,22 @@ var express         = require("express"),
     Comment     = require("./models/comment"),
     User        = require("./models/user");
 
+app.use(express.static('./dist'));
 
 // Requiring API routes
 var idolRoutes = require("./routes/idol"),
     commentRoutes    = require("./routes/comment"),
     userRoutes      = require("./routes/user");
+    
 
 // Database setup
 mongoose.connect("mongodb://localhost/bnk48");
 
 // Parsers for POST data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
 
 // Point static path to dist
-app.use(express.static(path.join(__dirname, 'dist')));
 
 // Setup https method
 app.use(methodOverride('_method'));

@@ -4,7 +4,7 @@ import {Comment} from "./comment.model";
 import {Deserializable} from "./deserializable.model";
 
 export class Idol  implements Deserializable<Idol> {
-  _id: number;
+  _id: any;
   firstname: String;
   lastname: String;
   nickname: String;
@@ -34,7 +34,7 @@ export class Idol  implements Deserializable<Idol> {
 }
 
 export class Idols  implements Deserializable<Idols> {
-  _id: number;
+  _id: any;
   firstname: String;
   lastname: String;
   nickname: String;

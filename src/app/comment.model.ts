@@ -2,7 +2,7 @@ import {Author} from "./author.model";
 import {Deserializable} from "./deserializable.model";
 
 export class Comment  implements Deserializable<Comment> {
-  _id: number;
+  _id: any;
   text: String;
   createdAt: String;
   author: Author;

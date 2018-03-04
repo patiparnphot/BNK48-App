@@ -5,8 +5,8 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right" *ngIf="currentUser; else notSign">
-          <li><a routerLink="/users/{{currentUser._id}}">Signed In As {{currentUser.firstname}}</a></li>
-          <li><button (click)="signout()">SignOut</button></li>
+          <li><a routerLink="/users/{{currentUser._id}}">Signed In As {{currentUser.username}}</a></li>
+          <li><a role="button" href="#" (click)="signout()">SignOut</a></li>
       </ul>
       <ng-template #notSign>
         <ul class="nav navbar-nav navbar-right">

@@ -1,13 +1,29 @@
+<app-header></app-header>
+ 
+<div class="container">
+
 <div class="row">
     <h1 style="text-align: center">Forgot Password</h1>
     <div style="width: 30%; margin: 25px auto;">
-        <div>
-            <label>Email:
-                <input [(ngModel)]="email" name="email" placeholder="example@gmail.com"/>
-            </label>
-        </div>
-        
-        <button (click)="forgotpassword()">ResetPassword</button>
-        <a routerLink="/idols">Go Back</a>
+        <form (ngSubmit)="forgotpassword()" #forgotForm="ngForm" [ngFormOptions]="{ updateOn: 'blur' }">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" [(ngModel)]="forgot.email" [ngModelOptions]="{ updateOn: 'change' }" 
+                name="email" placeholder="example@gmail.com" #email="ngModel" required>
+                <div [hidden]="email.valid || email.pristine" class="alert alert-danger">
+                    Email is required
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success" [disabled]="(!forgotForm.form.valid)">
+                    Submit
+                </button>
+                <button type="button" class="btn btn-success" (click)="goBack()" >
+                    GO BACK
+                </button>
+            </div>
+        </form>
     </div>
+</div>
+
 </div>

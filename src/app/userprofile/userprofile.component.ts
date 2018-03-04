@@ -10,6 +10,7 @@ import { IdolService } from '../idol.service';
 })
 export class UserprofileComponent implements OnInit {
   userprofile: Userprofile;
+  authorid = "";
 
   constructor(
     private route: ActivatedRoute,
@@ -17,13 +18,13 @@ export class UserprofileComponent implements OnInit {
   ) {};
 
   ngOnInit() {
+    this.authorid = this.route.snapshot.params.authorid;
     this.getUserProfile();
   };
 
   getUserProfile(): void {
-    const authorid = +this.route.snapshot.paramMap.get('authorid');
-    this.idolService.getUserProfile(authorid)
-    .subscribe(userprofile => this.userprofile = userprofile);
+    this.idolService.getUserProfile(this.authorid)
+    .subscribe((userprofile: Userprofile) => this.userprofile = userprofile);
   };
 
 }

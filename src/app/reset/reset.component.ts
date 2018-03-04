@@ -10,7 +10,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./reset.component.css']
 })
 export class ResetComponent implements OnInit {
-  reset: Userreset;
+  reset = {
+    password: "",
+    confirm: ""
+  };
+  token = "";
 
   constructor(
     private route: ActivatedRoute,
@@ -19,11 +23,11 @@ export class ResetComponent implements OnInit {
   ) {};
 
   ngOnInit() {
+    this.token = this.route.snapshot.params.token;
   };
 
   resetpassword(): void {
-    const token = +this.route.snapshot.paramMap.get('token');
-    this.idolService.reset(token, this.reset).subscribe(() => this.goBack())
+    this.idolService.reset(this.token, this.reset).subscribe(() => this.goBack())
   };
 
   goBack() {
