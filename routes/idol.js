@@ -1,6 +1,7 @@
 var express = require("express"),
     router  = express.Router(),
-    Idol = require("../models/idol");
+    Idol = require("../models/idol"),
+    middleware = require("../middleware");
 
 var preAuthenticate = function (req,res,next){
     console.log(JSON.stringify(req.body));
@@ -25,7 +26,7 @@ router.get("/:id", function(req, res, next) {
 });
 
 //CREATE - add a new idol to db
-router.post("/", preAuthenticate, function(req, res, next) {
+router.post("/", preAuthenticate, middleware.isLoggedIn, function(req, res, next) {
   Idol.create(req.body.idol, function (err, newlyIdol) {
     if (err) return next(err);
     newlyIdol.author.id = req.user._id;
@@ -37,7 +38,7 @@ router.post("/", preAuthenticate, function(req, res, next) {
 });
 
 //UPDATE - edit a idol in db
-router.put("/:id", function(req, res, next) {
+router.put("/:id", middleware.checkUserIdol, function(req, res, next) {
   Idol.findByIdAndUpdate(req.params.id, req.body.idol, function (err, idol) {
     if (err) return next(err);
     console.log(idol);
@@ -45,7 +46,7 @@ router.put("/:id", function(req, res, next) {
 });
 
 //DESTROY - delete a idol from db
-router.delete("/:id", function(req, res, next) {
+router.delete("/:id", middleware.checkUserIdol, function(req, res, next) {
   Idol.findByIdAndRemove(req.params.id, function (err) {
     if (err) return next(err);
   });

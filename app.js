@@ -25,7 +25,7 @@ var idolRoutes = require("./routes/idol"),
     userRoutes      = require("./routes/user");
     
 // Database setup
-mongoose.connect(process.env.DATABASEURL);
+mongoose.connect(process.env.DATABASEURL || "mongodb://localhost/bnk48");
 
 // Parsers for POST data
 app.use(bodyParser.json({limit: '50mb'}));
